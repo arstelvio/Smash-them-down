@@ -1,6 +1,6 @@
 // Character artwork.
-// Macron and Obama are painted caricatures (img/, see IMAGE_CHARACTERS); the
-// others are cartoons drawn as inline SVG strings.
+// Macron, Obama and de Funès are painted caricatures (img/, see
+// IMAGE_CHARACTERS); the casseur and the taxpayer are drawn as inline SVG.
 // Every character uses the same 200 x 240 frame: the head sits in the upper
 // part and the shoulders at the bottom are what disappears into the hole.
 // Expressions: 'idle', 'hit' and, for the two-hit casseur, 'hurt'.
@@ -13,33 +13,13 @@ const svg = (inner, w = 200, h = 240) =>
 
 /* ---------- shared face parts ---------- */
 
-function eyesIdle(iris, y = 102, lx = 78, rx = 122) {
-  return `
-  <ellipse cx="${lx}" cy="${y}" rx="11" ry="9.5" fill="#fff" stroke="${OL}" stroke-width="2.5"/>
-  <ellipse cx="${rx}" cy="${y}" rx="11" ry="9.5" fill="#fff" stroke="${OL}" stroke-width="2.5"/>
-  <circle cx="${lx + 1.5}" cy="${y + 1}" r="5.8" fill="${iris}"/>
-  <circle cx="${rx - 1.5}" cy="${y + 1}" r="5.8" fill="${iris}"/>
-  <circle cx="${lx + 1.5}" cy="${y + 1}" r="2.8" fill="#0d0d0d"/>
-  <circle cx="${rx - 1.5}" cy="${y + 1}" r="2.8" fill="#0d0d0d"/>
-  <circle cx="${lx + 3.5}" cy="${y - 1.5}" r="1.8" fill="#fff"/>
-  <circle cx="${rx + 0.5}" cy="${y - 1.5}" r="1.8" fill="#fff"/>`;
-}
-
 function eyesHit(y = 102, lx = 78, rx = 122) {
   const x = (cx) => `<path d="M${cx - 8} ${y - 7} L${cx + 8} ${y + 7} M${cx + 8} ${y - 7} L${cx - 8} ${y + 7}"/>`;
   return `<g stroke="${OL}" stroke-width="5" stroke-linecap="round" fill="none">${x(lx)}${x(rx)}</g>`;
 }
 
-function mouthHit(y = 146, w = 1) {
-  return `<ellipse cx="100" cy="${y}" rx="${11 * w}" ry="12" fill="#6b1d1d" stroke="${OL}" stroke-width="3"/>
-  <ellipse cx="100" cy="${y + 5}" rx="${6 * w}" ry="4" fill="#e0666b"/>`;
-}
-
 const browsWorried = (color, y = 84, w = 5.5) =>
   `<path d="M64 ${y + 4} Q76 ${y - 2} 90 ${y - 6} M110 ${y - 6} Q124 ${y - 2} 136 ${y + 4}" stroke="${color}" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
-
-const neck = (shade) =>
-  `<path d="M83 144 L83 188 L117 188 L117 144 Z" fill="${shade}" stroke="${OL}" stroke-width="${SW}"/>`;
 
 /* ---------- The black bloc rioter ("casseur") ---------- */
 
@@ -107,40 +87,6 @@ function casseur(expr) {
   `);
 }
 
-/* ---------- Sheikh Tamim bin Hamad Al Thani ---------- */
-
-function tamim(expr) {
-  const skin = '#d9a77d', shade = '#bf8b60', cloth = '#fbfbf8', fold = '#dcdcd4', beard = '#2a1f19';
-  const gold = '#d9ad3c';
-  const hit = expr === 'hit';
-  return svg(`
-    <path d="M4 242 C8 206 28 188 56 182 L144 182 C172 188 192 206 196 242 Z" fill="#2b1d14" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M62 184 L138 184 L144 242 L56 242 Z" fill="#f1f0ea" stroke="${OL}" stroke-width="2.5" stroke-linejoin="round"/>
-    <path d="M60 186 C62 206 60 226 56 242 M140 186 C138 206 140 226 144 242" fill="none" stroke="${gold}" stroke-width="6"/>
-    <path d="M100 196 L100 242" stroke="${fold}" stroke-width="2.4"/>
-    <path d="M100 8 C68 18 36 44 36 104 C36 140 34 176 30 214 C44 221 56 221 68 212 C72 196 78 181 86 168 L114 168 C122 181 128 196 132 212 C144 221 156 221 170 214 C166 176 164 140 164 104 C164 44 132 18 100 8 Z"
-      fill="${cloth}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M44 120 C44 156 42 184 38 208 M156 120 C156 156 158 184 162 208 M54 150 C54 170 52 190 50 214 M146 150 C146 170 148 190 150 214" fill="none" stroke="${fold}" stroke-width="3" stroke-linecap="round"/>
-    ${neck(shade)}
-    <path d="M83 182 Q100 192 117 182 L117 190 Q100 198 83 190 Z" fill="#f1f0ea" stroke="${OL}" stroke-width="2.2"/>
-    <ellipse cx="100" cy="106" rx="50" ry="60" fill="${skin}" stroke="${OL}" stroke-width="${SW}"/>
-    <path d="M51 112 C52 148 72 170 100 172 C128 170 148 148 149 112 C145 132 137 144 125 149 C117 141 109 139 100 140 C91 139 83 141 75 149 C63 144 55 132 51 112 Z" fill="${beard}"/>
-    ${hit ? mouthHit(150, 0.9) : `<path d="M88 147 Q100 154 112 147 Q100 150 88 147 Z" fill="#b8695c" stroke="#8a4a3f" stroke-width="2" stroke-linejoin="round"/>`}
-    <path d="M81 138 C89 131 96 133 100 136 C104 133 111 131 119 138 C111 142 104 140 100 139 C96 140 89 142 81 138 Z" fill="${beard}"/>
-    ${hit ? browsWorried(beard, 88, 6) : `<path d="M65 91 Q78 83 92 89 M108 89 Q122 83 135 91" stroke="${beard}" stroke-width="6.5" fill="none" stroke-linecap="round"/>`}
-    ${hit ? eyesHit(105, 79, 121) : eyesIdle('#3d2617', 105, 79, 121)}
-    <path d="M100 109 Q93 125 96 129 Q101 132 107 128" fill="none" stroke="${OL}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M100 20 C66 30 44 58 48 116 C52 96 58 84 68 76 C78 70 90 67 100 67 C110 67 122 70 132 76 C142 84 148 96 152 116 C156 58 134 30 100 20 Z"
-      fill="${cloth}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M64 70 C74 62 88 58 100 58 C112 58 126 62 136 70" fill="none" stroke="${fold}" stroke-width="3" stroke-linecap="round"/>
-    <path d="M100 22 L100 52" stroke="${fold}" stroke-width="2.6" stroke-linecap="round"/>
-    <path d="M56 46 Q100 26 144 46" fill="none" stroke="#141414" stroke-width="6" stroke-linecap="round"/>
-    <path d="M50 54 Q100 74 150 54" fill="none" stroke="#141414" stroke-width="7" stroke-linecap="round"/>
-    <path d="M52 45 Q100 64 148 45" fill="none" stroke="#141414" stroke-width="7" stroke-linecap="round"/>
-    <path d="M60 52 Q100 68 140 52" fill="none" stroke="#3a3a3a" stroke-width="1.6" stroke-linecap="round"/>
-  `);
-}
-
 /* ---------- The innocent taxpayer mole (do not hit!) ---------- */
 
 function taxpayer(expr) {
@@ -196,14 +142,16 @@ export const hammerSVG = svg(`
   <rect x="12" y="78" width="56" height="18" rx="8" fill="#f4c84b" stroke="${OL}" stroke-width="3"/>
 `, 152, 100);
 
-const BUILDERS = { casseur, tamim, taxpayer };
+const BUILDERS = { casseur, taxpayer };
 
 // Characters drawn from a picture instead of SVG (400 x 480 WebP, same frame),
 // built from painted caricatures by tools/portraits/build.py.
 // Macron: caricature by DonkeyHotey (2018), Creative Commons.
+// De Funès: Louis de Funès as Rabbi Jacob, from an illustrated book on the film.
 export const IMAGE_CHARACTERS = {
   macron: { idle: 'img/macron.webp', hit: 'img/macron-hit.webp' },
   obama: { idle: 'img/obama.webp', hit: 'img/obama-hit.webp' },
+  defunes: { idle: 'img/defunes.webp', hit: 'img/defunes-hit.webp' },
 };
 
 export function characterSVG(id, expr = 'idle') {

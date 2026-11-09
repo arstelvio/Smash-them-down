@@ -1,6 +1,6 @@
 // Service worker: makes the game load instantly and work offline.
 // Bump VERSION whenever a file of the game changes, so players get the update.
-const VERSION = 'smash-v4';
+const VERSION = 'smash-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -17,6 +17,8 @@ const ASSETS = [
   './img/macron-hit.webp',
   './img/obama.webp',
   './img/obama-hit.webp',
+  './img/defunes.webp',
+  './img/defunes-hit.webp',
   './fonts/LilitaOne-Regular-latin.woff2',
   './fonts/Nunito-latin.woff2',
   './icons/icon-192.png',

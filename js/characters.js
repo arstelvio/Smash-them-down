@@ -48,22 +48,24 @@ export const CHARACTERS = {
     tough: ['Is that all?', 'Not even a scratch!', 'My hood absorbed it!'],
     ouch: ['Not the sneakers!', 'I want my mom!', "I'm calling my lawyer!", 'Ouch, the system!'],
   },
-  tamim: {
-    name: 'Tamim',
-    nickname: '"The Emir"',
+  defunes: {
+    name: 'De Funès',
+    nickname: '"Rabbi Jacob"',
     points: 30,
     speed: 0.6,
     weight: 7,
-    help: 'Rare and slippery. Rains petrodollars when smashed.',
+    rare: true, // golden glow, splash of green chewing gum when smashed
+    help: 'Rare and hyperactive: smash him before he dances away. Splashes green chewing gum!',
     lines: [
-      'Let me buy that.',
-      'More gas, anyone?',
-      "Here's your bisht!",
-      'Stadium is air-conditioned!',
-      'World Cup? Done.',
-      "I'll buy the club.",
+      'Non! Oui! Non!',
+      'Hop hop hop!',
+      'Salomon, hurry up!',
+      "It's my daughter's wedding!",
+      'Rabbi Jacob is dancing!',
+      'Calmos, calmos!',
     ],
-    ouch: ['My petrodollars!', 'Charge it to my account!', 'I will buy a new face!'],
+    ouch: ['Not the chewing gum!', 'Ma biche!', 'Ouh la la la la!'],
+    escape: ['Hop! Danced away!', 'Rabbi Jacob, gone dancing!'],
   },
   taxpayer: {
     name: 'Taxpayer',
@@ -78,7 +80,7 @@ export const CHARACTERS = {
   },
 };
 
-export const LEADERS = ['macron', 'obama', 'casseur', 'tamim'];
+export const LEADERS = ['macron', 'obama', 'casseur', 'defunes'];
 export const ALL_TYPES = [...LEADERS, 'taxpayer'];
 
 export const pick = (arr) => arr[(Math.random() * arr.length) | 0];

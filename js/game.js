@@ -528,7 +528,7 @@ export class Game {
       macron: CHARACTERS.macron.weight,
       obama: CHARACTERS.obama.weight,
       casseur: CHARACTERS.casseur.weight,
-      tamim: CHARACTERS.tamim.weight + 5 * d,
+      defunes: CHARACTERS.defunes.weight + 5 * d,
       taxpayer: this.elapsed < 4 ? 0 : CHARACTERS.taxpayer.weight + 10 * d,
     };
     let total = 0;
@@ -727,10 +727,10 @@ export class Game {
     sfx.bonk();
     vibrate(16);
 
-    if (m.type === 'tamim') {
-      this._coins(h.cx, headY, 16);
-      this._popup(h.cx, top - this.s * 0.1, 'PETRODOLLARS!', '#ffd700', 0.75, false, 1.1);
-      sfx.coins();
+    if (def.rare) {
+      this._gum(h.cx, headY, 14);
+      this._popup(h.cx, top - this.s * 0.1, 'CHEWING GUM!', '#7dff6a', 0.75, false, 1.1);
+      sfx.splat();
     }
 
     const newMult = this.mult;
@@ -812,15 +812,16 @@ export class Game {
     }
   }
 
-  _coins(x, y, n) {
+  // green chewing-gum splashes (a nod to the famous vat scene in Rabbi Jacob)
+  _gum(x, y, n) {
     for (let i = 0; i < n; i++) {
       const a = rand(-Math.PI * 0.95, -Math.PI * 0.05);
-      const sp = rand(160, 380);
+      const sp = rand(150, 360);
       this.particles.push({
-        kind: 'coin', x, y,
-        vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: 900,
-        rot: rand(0, 6), vr: rand(8, 16),
-        size: rand(0.11, 0.15) * this.s,
+        kind: 'gum', x, y,
+        vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: 950,
+        rot: rand(0, 6), vr: rand(-6, 6),
+        size: rand(0.09, 0.16) * this.s,
         t: 0, life: rand(0.7, 1.0),
       });
     }
@@ -895,7 +896,7 @@ export class Game {
     g.ellipse(h.cx, h.cy, h.rx, h.ry, 0, 0, Math.PI * 2);
     g.clip();
 
-    if (m.type === 'tamim' && m.state !== 'hit') {
+    if (CHARACTERS[m.type].rare && m.state !== 'hit') {
       const gy = top + this.ch * 0.36;
       const r = h.rx * 1.04;
       const rg = g.createRadialGradient(h.cx, gy, r * 0.25, h.cx, gy, r);
@@ -1010,22 +1011,22 @@ export class Game {
         g.strokeStyle = OL;
         g.lineWidth = 1.3;
         g.stroke();
-      } else if (p.kind === 'coin') {
-        const sx = Math.max(0.15, Math.abs(Math.cos(p.rot)));
+      } else if (p.kind === 'gum') {
+        const stretch = 1 + Math.min(0.8, Math.hypot(p.vx, p.vy) / 900);
         g.translate(p.x, p.y);
-        g.scale(sx, 1);
+        g.rotate(Math.atan2(p.vy, p.vx));
+        g.scale(stretch, 1 / stretch);
         g.beginPath();
         g.arc(0, 0, p.size, 0, Math.PI * 2);
-        g.fillStyle = '#ffd23f';
+        g.fillStyle = '#5fe05a';
         g.fill();
         g.lineWidth = 2;
-        g.strokeStyle = '#a8740b';
+        g.strokeStyle = '#1f7a2a';
         g.stroke();
         g.beginPath();
-        g.arc(0, 0, p.size * 0.6, 0, Math.PI * 2);
-        g.strokeStyle = '#e6a91a';
-        g.lineWidth = 1.5;
-        g.stroke();
+        g.arc(-p.size * 0.3, -p.size * 0.3, p.size * 0.3, 0, Math.PI * 2);
+        g.fillStyle = '#c9ffc0';
+        g.fill();
       } else {
         g.globalAlpha *= 0.55;
         g.fillStyle = '#e9d8b8';

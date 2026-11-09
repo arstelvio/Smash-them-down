@@ -35,6 +35,22 @@ PORTRAITS = {
         'eye_skin': (214, 160, 124),
         'bump': (205, 62),
     },
+    # Louis de Funès as Rabbi Jacob (illustration from a book about the film).
+    # The background is too busy for an automatic cut-out: the mask was made
+    # semi-manually (GrabCut for the hat + per-row sidelock edges) and saved.
+    'defunes': {
+        'source': 'defunes.jpg',
+        'mask': 'defunes-mask.png',
+        # black & white drawing -> warm skin tones, blacks and whites kept
+        'colorize': [(0, (16, 14, 13)), (70, (40, 35, 32)), (120, (122, 97, 82)),
+                     (170, (190, 153, 128)), (215, (232, 204, 181)), (245, (249, 238, 226)), (255, (255, 250, 244))],
+        'scale': 1.25,
+        'offset': (200 - 250 * 1.25, 6 - 25 * 1.25),
+        'eyes': [(211, 136), (268, 134)],
+        'eye_r': 15,
+        'eye_skin': (222, 190, 166),
+        'bump': (234, 100),
+    },
     'obama': {
         'source': 'obama.jpg',
         'background': 'white',
@@ -90,8 +106,22 @@ def largest_component(fg):
     return lab == best
 
 
+def colorize(im, stops):
+    lum = np.asarray(im.convert('L')).astype(np.float32)
+    xp = [p for p, _ in stops]
+    rgb = [np.interp(lum, xp, [c[i] for _, c in stops]) for i in range(3)]
+    return Image.fromarray(np.stack(rgb, 2).round().astype(np.uint8))
+
+
 def cut_out(cfg):
     im = Image.open(HERE / cfg['source']).convert('RGB')
+    if 'colorize' in cfg:
+        im = colorize(im, cfg['colorize'])
+    if 'mask' in cfg:
+        mask = Image.open(HERE / cfg['mask']).convert('L').filter(ImageFilter.GaussianBlur(0.9))
+        rgba = im.convert('RGBA')
+        rgba.putalpha(mask)
+        return rgba
     a = np.asarray(im).astype(np.int16)
     h, w, _ = a.shape
     sat = a.max(2) - a.min(2)

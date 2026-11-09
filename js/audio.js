@@ -94,9 +94,11 @@ export const sfx = {
     tone({ type: 'sawtooth', f0: 200, f1: 90, dur: 0.35, vol: 0.22 });
     tone({ type: 'square', f0: 150, f1: 70, dur: 0.35, vol: 0.12 });
   },
-  coins() {
+  splat() {
     if (!ready()) return;
-    [1320, 1760, 2093, 2637].forEach((f, i) => tone({ type: 'triangle', f0: f, dur: 0.12, vol: 0.14, delay: i * 0.05 }));
+    noise({ dur: 0.18, vol: 0.4, filter: 'lowpass', f0: 1800, f1: 300 });
+    tone({ type: 'sine', f0: 420, f1: 120, dur: 0.22, vol: 0.3, delay: 0.02 });
+    tone({ type: 'triangle', f0: 900, f1: 1400, dur: 0.1, vol: 0.08, delay: 0.12 });
   },
   bonus() {
     if (!ready()) return;
