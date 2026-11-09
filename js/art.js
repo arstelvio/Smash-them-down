@@ -79,24 +79,57 @@ const flagUS = (x, y) => `<g transform="translate(${x} ${y})">
 /* ---------- Macron ---------- */
 
 function macron(expr) {
-  const skin = '#f5cda9', shade = '#dda882', hair = '#3f2a1d', hairHi = '#74513a';
+  const skin = '#f4caa6', shade = '#d69f7a', hair = '#4a3122', hairHi = '#82604a', brow = '#3a2619';
   const hit = expr === 'hit';
+  // Long face with a narrow, V-shaped jaw.
+  const face = 'M100 31 C134 31 155 54 155 90 C155 116 149 134 137 149 C127 161 114 169 100 170 C86 169 73 161 63 149 C51 134 45 116 45 90 C45 54 66 31 100 31 Z';
+  // Big, protruding ears.
+  const earL = 'M50 84 C43 69 29 64 26 76 C23 91 27 108 34 118 C39 124 45 126 51 124 Z';
+  const earR = 'M150 84 C157 69 171 64 174 76 C177 91 173 108 166 118 C161 124 155 126 149 124 Z';
+  // Thick, straight eyebrows that drop at the outer end.
+  const browL = 'M58 87 C66 78 80 75 94 78 C95 81 95 84 94 86 C82 84 71 86 61 92 C58 91 57 89 58 87 Z';
+  const browR = 'M142 87 C134 78 120 75 106 78 C105 81 105 84 106 86 C118 84 129 86 139 92 C142 91 143 89 142 87 Z';
+  // Voluminous hair swept back, parted on the side, grey at the temples.
+  const hairPath = 'M48 90 C38 60 48 28 78 15 C101 6 132 9 150 26 C162 39 162 64 152 90 C150 74 146 62 139 55 C128 51 114 56 102 54 C90 52 76 47 63 53 C55 61 50 75 48 90 Z';
+  const eye = (cx, dir) => `
+    <ellipse cx="${cx}" cy="101" rx="12" ry="8.6" fill="#fff" stroke="${OL}" stroke-width="2.2"/>
+    <circle cx="${cx + dir}" cy="101.8" r="6.6" fill="#2b8af0" stroke="#164a95" stroke-width="1.4"/>
+    <circle cx="${cx + dir}" cy="101.8" r="2.9" fill="#0d0d0d"/>
+    <circle cx="${cx + dir + 2.4}" cy="99.2" r="2" fill="#fff"/>
+    <path d="M${cx - 13} 99.5 C${cx - 8} 91 ${cx + 8} 91 ${cx + 13} 98.5" fill="none" stroke="${OL}" stroke-width="3.8" stroke-linecap="round"/>
+    <path d="M${cx - 7} 111.5 Q${cx} 113.5 ${cx + 7} 111.5" fill="none" stroke="${shade}" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>`;
   return svg(`
-    ${neck(shade)}
-    ${suit('#1e2a4e', '#16203e', '#2d4386', flagFR(126, 200))}
-    ${ears(skin, shade, 46, 154, 108, 10, 16)}
-    <ellipse cx="100" cy="102" rx="55" ry="63" fill="${skin}" stroke="${OL}" stroke-width="${SW}"/>
-    <path d="M46 102 C38 66 54 38 82 31 C104 25 132 29 147 43 C160 57 162 80 154 102 C151 88 147 77 140 69 C126 73 108 69 95 60 C91 69 83 73 73 74 C61 78 51 89 46 102 Z"
-      fill="${hair}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M76 42 C97 33 124 35 141 48" fill="none" stroke="${hairHi}" stroke-width="4" stroke-linecap="round"/>
-    <path d="M97 58 C105 49 118 44 132 45" fill="none" stroke="${hairHi}" stroke-width="3" stroke-linecap="round"/>
-    ${hit ? browsWorried(hair) : `<path d="M64 87 Q77 78 90 84 M110 84 Q123 78 136 87" stroke="${hair}" stroke-width="5.5" fill="none" stroke-linecap="round"/>`}
-    ${hit ? eyesHit() : eyesIdle('#3a7cc8')}
-    <path d="M100 106 Q93 123 96 128 Q101 131 107 127" fill="none" stroke="${OL}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    ${hit ? mouthHit(147) : `<path d="M83 141 Q101 152 118 139" fill="none" stroke="${OL}" stroke-width="3.5" stroke-linecap="round"/>
-      <path d="M117 140 L121.5 135.5" stroke="${OL}" stroke-width="3" stroke-linecap="round"/>`}
-    <path d="M96 160 Q100 163 104 160" fill="none" stroke="${shade}" stroke-width="2.5" stroke-linecap="round"/>
-    ${cheeks()}
+    <defs>
+      <clipPath id="mhc"><path d="${hairPath}"/></clipPath>
+      <radialGradient id="mgrey">
+        <stop offset="0" stop-color="#b9b3ac"/><stop offset="0.55" stop-color="#a39b93"/><stop offset="1" stop-color="#a39b93" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <path d="M86 146 L86 188 L114 188 L114 146 Z" fill="${shade}" stroke="${OL}" stroke-width="${SW}"/>
+    ${suit('#1c2850', '#141d3c', '#1f2f63', flagFR(126, 200))}
+    <path d="${earL}" fill="${skin}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="${earR}" fill="${skin}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M45 88 C36 80 32 96 37 108 C39 113 43 116 46 116 M155 88 C164 80 168 96 163 108 C161 113 157 116 154 116" fill="none" stroke="${shade}" stroke-width="3" stroke-linecap="round"/>
+    <path d="${face}" fill="${skin}" stroke="${OL}" stroke-width="${SW}"/>
+    <g clip-path="url(#mhc)">
+      <rect x="30" y="0" width="140" height="100" fill="${hair}"/>
+      <ellipse cx="47" cy="80" rx="20" ry="34" fill="url(#mgrey)"/>
+      <ellipse cx="153" cy="80" rx="20" ry="34" fill="url(#mgrey)"/>
+    </g>
+    <path d="${hairPath}" fill="none" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M137 22 C142 32 143 43 140 54" fill="none" stroke="#2c1b10" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M134 50 C130 34 118 24 98 22 M118 53 C112 39 98 31 77 30 M100 53 C92 43 78 39 61 44" fill="none" stroke="${hairHi}" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M55 72 C55 62 59 55 66 50 M145 72 C145 62 141 55 134 50" fill="none" stroke="#d4cfc9" stroke-width="2.2" stroke-linecap="round"/>
+    ${hit ? browsWorried(brow, 84, 6.5) : `<path d="${browL}" fill="${brow}"/><path d="${browR}" fill="${brow}"/>`}
+    ${hit ? eyesHit(101) : eye(78, 1) + eye(122, -1)}
+    <path d="M102 93 C103 104 105 115 107 122 C107 128 101 130 96 127 C93 126 92 123 94 121" fill="none" stroke="${OL}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M79 126 C75 133 76 140 79 145 M121 124 C126 131 126 138 122 143" fill="none" stroke="${shade}" stroke-width="2" stroke-linecap="round" opacity="0.85"/>
+    ${hit ? mouthHit(148) : `
+      <path d="M80 142 C89 148 111 148 121 139" fill="none" stroke="${OL}" stroke-width="3.4" stroke-linecap="round"/>
+      <path d="M80 142 L76.5 140 M121 139 L124 135" stroke="${OL}" stroke-width="2.8" stroke-linecap="round"/>
+      <path d="M92 152 Q101 155 110 151" fill="none" stroke="${shade}" stroke-width="2.2" stroke-linecap="round"/>`}
+    <path d="M100 159 L100 165" stroke="${shade}" stroke-width="2.5" stroke-linecap="round"/>
+    ${cheeks(0.2)}
   `);
 }
 
