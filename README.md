@@ -1,6 +1,6 @@
 # Smash Them Down 🔨
 
-Jeu satirique de « tape-taupe » pour mobile : **Macron, Obama, Modi et Cheikh Tamim** sortent de leurs trous, il faut les frapper au marteau… mais épargner la pauvre taupe **Taxpayer** (le contribuable) ! Chaque partie dure 60 secondes et un **Top 10 commun** permet à tous les amis de se mesurer sur le même tableau des scores.
+Jeu satirique de « tape-taupe » pour mobile : **Macron, Obama, un casseur black bloc et Cheikh Tamim** sortent de leurs trous, il faut les frapper au marteau… mais épargner la pauvre taupe **Taxpayer** (le contribuable) ! Chaque partie dure 60 secondes et un **Top 10 commun** permet à tous les amis de se mesurer sur le même tableau des scores.
 
 - 📱 Format vertical, pensé pour le téléphone (Safari sur iPhone, Chrome sur Android). Jouable aussi sur ordinateur.
 - 🚫 Sans installation : c'est une page web. Elle **peut être ajoutée à l'écran d'accueil**, avec sa propre icône et en plein écran (PWA).
@@ -8,7 +8,7 @@ Jeu satirique de « tape-taupe » pour mobile : **Macron, Obama, Modi et Cheikh 
 - ✈️ Fonctionne hors connexion une fois ouvert (les scores sont envoyés au retour du réseau).
 - 🇬🇧 Le jeu est entièrement en anglais.
 
-> Œuvre satirique : uniquement des caricatures. Obama, Modi, Tamim et la taupe sont dessinés en SVG ; Macron utilise une caricature peinte de DonkeyHotey (voir *Crédits*).
+> Œuvre satirique : uniquement des caricatures. Macron et Obama sont des caricatures peintes (voir *Crédits*) ; le casseur, Tamim et la taupe sont dessinés en SVG.
 
 ## Règles
 
@@ -16,7 +16,7 @@ Jeu satirique de « tape-taupe » pour mobile : **Macron, Obama, Modi et Cheikh 
 |---|---|---|
 | Macron « Jupiter » | +10 | Apparaît parfois dans deux trous **en même temps** : frapper les deux = bonus |
 | Obama « Yes we can » | +15 | Le plus rapide |
-| Modi « 56-inch chest » | +20 | Il faut le frapper **deux fois** |
+| Black Bloc « The Casseur » | +20 | Capuche, casquette et masque : il faut le frapper **deux fois** |
 | Tamim « The Emir » | +30 | Rare et rapide, fait pleuvoir des pétrodollars |
 | Taxpayer 🐹 | **−25** | Ne PAS le frapper (le combo est perdu) |
 
@@ -79,7 +79,7 @@ js/config.js          ← URL Firebase à renseigner
 js/main.js            écrans, classement, installation
 js/game.js            moteur du jeu (canvas)
 js/art.js             caricatures en SVG (+ images de img/)
-img/                  Macron (normal et « assommé »), au format WebP
+img/                  Macron et Obama (normal et « assommé »), au format WebP
 js/characters.js      personnages, points, répliques
 js/audio.js           sons synthétisés (Web Audio, aucun fichier)
 js/leaderboard.js     Top 10 partagé (Firebase REST) + secours local/hors ligne
@@ -87,7 +87,7 @@ sw.js                 service worker (hors ligne, chargement rapide)
 manifest.webmanifest  manifeste PWA (icône, plein écran, portrait)
 firebase-rules.json   règles de sécurité de la base
 icons/                icônes (générées par tools/make-icons.mjs)
-tools/macron/         portrait d'origine + scripts de détourage (cutout.py, sprite.mjs)
+tools/portraits/      portraits d'origine + build.py (détourage, cadrage, version « assommée »)
 fonts/                polices Lilita One et Nunito (licence SIL OFL)
 ```
 
@@ -96,4 +96,5 @@ Pour tester en local : `python3 -m http.server 8000` puis ouvrir <http://localho
 ## Crédits
 
 - **Caricature d'Emmanuel Macron** : [DonkeyHotey](https://www.flickr.com/photos/donkeyhotey/) (2018), publiée sous licence Creative Commons sur Flickr. Elle est utilisée détourée, et la version « assommée » ajoute des yeux en croix et une bosse. La signature de l'artiste a été retirée de l'image du jeu, d'où la mention dans le jeu (écran *How to play*) et ici. Pense à vérifier sur la page Flickr d'origine la licence exacte (CC BY ou CC BY-SA) et à compléter la mention si besoin.
+- **Caricature de Barack Obama** : image fournie, auteur non identifié. À créditer ici et dans le jeu dès que l'auteur est connu (et à vérifier qu'elle peut être réutilisée).
 - **Polices** : Lilita One et Nunito, licence SIL Open Font License (voir `fonts/OFL.txt`).

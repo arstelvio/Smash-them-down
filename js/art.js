@@ -1,9 +1,9 @@
 // Character artwork.
-// Most characters are cartoon caricatures drawn as inline SVG strings; Macron
-// uses a painted caricature (img/, see IMAGE_CHARACTERS).
+// Macron and Obama are painted caricatures (img/, see IMAGE_CHARACTERS); the
+// others are cartoons drawn as inline SVG strings.
 // Every character uses the same 200 x 240 frame: the head sits in the upper
 // part and the shoulders at the bottom are what disappears into the hole.
-// Expressions: 'idle', 'hit' and (Modi only) 'hurt'.
+// Expressions: 'idle', 'hit' and, for the two-hit casseur, 'hurt'.
 
 const OL = '#2e1c10'; // outline colour
 const SW = 3.5; // outline width
@@ -12,13 +12,6 @@ const svg = (inner, w = 200, h = 240) =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${inner}</svg>`;
 
 /* ---------- shared face parts ---------- */
-
-function ears(skin, shade, lx, rx, cy, w, h) {
-  const one = (cx, dir) =>
-    `<ellipse cx="${cx}" cy="${cy}" rx="${w}" ry="${h}" fill="${skin}" stroke="${OL}" stroke-width="${SW}"/>` +
-    `<path d="M${cx + dir * 3} ${cy - h * 0.5} Q${cx - dir * w * 0.45} ${cy} ${cx + dir * 3} ${cy + h * 0.5}" fill="none" stroke="${shade}" stroke-width="3" stroke-linecap="round"/>`;
-  return one(lx, 1) + one(rx, -1);
-}
 
 function eyesIdle(iris, y = 102, lx = 78, rx = 122) {
   return `
@@ -45,118 +38,72 @@ function mouthHit(y = 146, w = 1) {
 const browsWorried = (color, y = 84, w = 5.5) =>
   `<path d="M64 ${y + 4} Q76 ${y - 2} 90 ${y - 6} M110 ${y - 6} Q124 ${y - 2} 136 ${y + 4}" stroke="${color}" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
 
-const browsAngry = (color, y = 84, w = 6) =>
-  `<path d="M63 ${y - 5} L91 ${y + 4} M109 ${y + 4} L137 ${y - 5}" stroke="${color}" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
-
-const cheeks = (op = 0.28) =>
-  `<ellipse cx="68" cy="126" rx="8" ry="5" fill="#f0786a" opacity="${op}"/>
-   <ellipse cx="132" cy="126" rx="8" ry="5" fill="#f0786a" opacity="${op}"/>`;
-
 const neck = (shade) =>
   `<path d="M83 144 L83 188 L117 188 L117 144 Z" fill="${shade}" stroke="${OL}" stroke-width="${SW}"/>`;
 
-function suit(suitCol, lapel, tie, pin = '') {
-  return `
-  <path d="M10 242 C12 205 36 186 70 180 L130 180 C164 186 188 205 190 242 Z" fill="${suitCol}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
-  <path d="M74 180 L100 226 L126 180 Z" fill="#fbfbfb" stroke="${OL}" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M94 190 L106 190 L104 199 L109.5 230 L100 240 L90.5 230 L96 199 Z" fill="${tie}" stroke="${OL}" stroke-width="2.2" stroke-linejoin="round"/>
-  <path d="M93 188 L107 188 L104.5 199 L95.5 199 Z" fill="${tie}" stroke="${OL}" stroke-width="2.2" stroke-linejoin="round"/>
-  <path d="M68 180 L76 180 L100 228 L92 242 L80 242 L60 196 Z" fill="${lapel}" stroke="${OL}" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M132 180 L124 180 L100 228 L108 242 L120 242 L140 196 Z" fill="${lapel}" stroke="${OL}" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M84 182 L76 179 L86 197 Z M116 182 L124 179 L114 197 Z" fill="#fff" stroke="${OL}" stroke-width="2" stroke-linejoin="round"/>
-  ${pin}`;
-}
+/* ---------- The black bloc rioter ("casseur") ---------- */
 
-const flagUS = (x, y) => `<g transform="translate(${x} ${y})">
-  <rect width="16" height="10" fill="#fff"/>
-  <rect y="0" width="16" height="1.6" fill="#d22f3c"/><rect y="3.2" width="16" height="1.6" fill="#d22f3c"/>
-  <rect y="6.4" width="16" height="1.6" fill="#d22f3c"/><rect y="8.6" width="16" height="1.4" fill="#d22f3c"/>
-  <rect width="7" height="5.4" fill="#27407f"/>
-  <rect width="16" height="10" fill="none" stroke="${OL}" stroke-width="1.2"/></g>`;
-
-/* ---------- Obama ---------- */
-
-function obama(expr) {
-  const skin = '#8f5c3d', shade = '#6f4529', hair = '#4a4745', hairHi = '#a19d97';
-  const hit = expr === 'hit';
-  const speckles = [
-    [70, 46], [84, 40], [98, 38], [112, 39], [126, 43], [138, 50], [62, 56], [76, 50], [92, 45],
-    [106, 44], [120, 47], [134, 56], [146, 66], [56, 68], [144, 78], [54, 80],
-  ].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.7" fill="${hairHi}"/>`).join('');
-  return svg(`
-    ${neck(shade)}
-    ${suit('#2a2e36', '#20232a', '#3f74c9', flagUS(124, 199))}
-    ${ears(skin, shade, 42, 158, 104, 14, 21)}
-    <ellipse cx="100" cy="101" rx="55" ry="66" fill="${skin}" stroke="${OL}" stroke-width="${SW}"/>
-    <path d="M46 92 C44 58 66 34 100 34 C134 34 156 58 154 92 C150 78 144 68 133 62 C118 56 82 56 67 62 C56 68 50 78 46 92 Z"
-      fill="${hair}" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/>
-    ${speckles}
-    ${hit ? browsWorried('#231f1d', 86) : `<path d="M63 88 Q77 80 91 86 M109 86 Q123 80 137 88" stroke="#231f1d" stroke-width="5.5" fill="none" stroke-linecap="round"/>`}
-    ${hit ? eyesHit(103) : eyesIdle('#3a2415', 103)}
-    <path d="M99 108 Q95 120 93 124" fill="none" stroke="${OL}" stroke-width="2.8" stroke-linecap="round"/>
-    <path d="M89 125 Q93 131 100 128 Q107 131 111 125" fill="none" stroke="${OL}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M73 122 Q68 134 75 143 M127 122 Q132 134 125 143" fill="none" stroke="${shade}" stroke-width="2.6" stroke-linecap="round"/>
-    ${hit ? mouthHit(148, 1.1) : `
-      <path d="M75 135 Q100 164 125 135 Q100 145 75 135 Z" fill="#fff" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/>
-      <path d="M80 138.5 Q100 150 120 138.5" fill="none" stroke="#cfcfcf" stroke-width="1.6"/>
-      <path d="M88 141 L88 148 M100 143 L100 151 M112 141 L112 148" stroke="#d6d6d6" stroke-width="1.4"/>`}
-    <path d="M94 160 Q100 164 106 160" fill="none" stroke="${shade}" stroke-width="2.5" stroke-linecap="round"/>
-  `);
-}
-
-/* ---------- Narendra Modi ---------- */
-
-function modi(expr) {
-  const skin = '#c98e66', shade = '#ab7350', white = '#f3f2ee', grey = '#c9c7c0';
+function casseur(expr) {
+  const skin = '#d8a37b', cloth = '#1e1e23', cap = '#131316', mask = '#25252b', fold = '#3d3d47', brow = '#2a1d15';
   const hit = expr === 'hit', hurt = expr === 'hurt';
-  const glasses = `
-    <g fill="rgba(255,255,255,0.22)" stroke="#b08a34" stroke-width="2.6">
-      <rect x="61" y="90" width="34" height="23" rx="8"/>
-      <rect x="105" y="90" width="34" height="23" rx="8"/>
-    </g>
-    <path d="M95 99 Q100 95.5 105 99 M61 98 L48 95 M139 98 L152 95" stroke="#b08a34" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
-  const bandAid = `<g transform="rotate(-24 128 66)">
-      <rect x="110" y="60" width="36" height="13" rx="6" fill="#f2c38f" stroke="${OL}" stroke-width="2"/>
-      <rect x="122" y="60" width="12" height="13" fill="#e7ad73"/>
-      <circle cx="115" cy="66.5" r="1" fill="#b98455"/><circle cx="141" cy="66.5" r="1" fill="#b98455"/></g>`;
-  let brows, eyes, mouth;
+  // raised black-gloved fist holding a paving stone (dropped once knocked out)
+  const stone = hit ? '' : `
+    <path d="M152 206 C161 178 166 150 163 124 L187 121 C192 150 187 184 174 210 Z" fill="${cloth}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M152 76 L186 76 L195 65 L161 65 Z" fill="#cdc9c1" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M186 76 L195 65 L195 93 L186 104 Z" fill="#817d76" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="152" y="76" width="34" height="28" fill="#a7a39b" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M158 86 L167 84 M172 95 L181 93" stroke="#8c887f" stroke-width="2" stroke-linecap="round"/>
+    <rect x="157" y="96" width="32" height="30" rx="11" fill="#2b2b31" stroke="${OL}" stroke-width="${SW}"/>
+    <path d="M163 105 L183 105 M163 113 L183 113" stroke="#4a4a54" stroke-width="2.2" stroke-linecap="round"/>`;
+  // after the first hit: two crossed plasters stuck on the cap
+  const plaster = (rot) => `<g transform="rotate(${rot} 122 46)">
+      <rect x="104" y="40" width="36" height="12" rx="6" fill="#f2c38f" stroke="${OL}" stroke-width="2"/>
+      <rect x="117" y="40" width="10" height="12" fill="#e7ad73"/></g>`;
+  const bandAid = plaster(35) + plaster(-35);
+  let eyes, brows;
   if (hit) {
-    brows = browsWorried(grey, 84);
-    eyes = eyesHit(101);
-    mouth = mouthHit(150, 0.9);
-  } else if (hurt) {
-    brows = browsAngry('#bdbab2', 85);
-    eyes = eyesIdle('#2e1d12', 101);
-    mouth = `<path d="M90 150 Q100 146 110 150" fill="none" stroke="#6a4434" stroke-width="3.2" stroke-linecap="round"/>`;
+    eyes = eyesHit(109, 80, 120);
+    brows = browsWorried(brow, 102, 6);
   } else {
-    brows = `<path d="M64 86 Q77 80 90 85 M110 85 Q123 80 136 86" stroke="#d4d2cb" stroke-width="6" fill="none" stroke-linecap="round"/>`;
-    eyes = eyesIdle('#2e1d12', 101);
-    mouth = `<path d="M88 148 Q100 155 112 148" fill="none" stroke="#6a4434" stroke-width="3.2" stroke-linecap="round"/>`;
+    eyes = `
+      <ellipse cx="80" cy="109" rx="10.5" ry="7.5" fill="#fff" stroke="${OL}" stroke-width="2.3"/>
+      <ellipse cx="120" cy="109" rx="10.5" ry="7.5" fill="#fff" stroke="${OL}" stroke-width="2.3"/>
+      <circle cx="82" cy="110" r="4.8" fill="#4a3020"/><circle cx="118" cy="110" r="4.8" fill="#4a3020"/>
+      <circle cx="82" cy="110" r="2.3" fill="#0d0d0d"/><circle cx="118" cy="110" r="2.3" fill="#0d0d0d"/>
+      <circle cx="83.6" cy="108.2" r="1.5" fill="#fff"/><circle cx="119.6" cy="108.2" r="1.5" fill="#fff"/>`;
+    brows = hurt
+      ? `<path d="M65 96 L91 105 M109 105 L135 96" stroke="${brow}" stroke-width="6.5" fill="none" stroke-linecap="round"/>`
+      : `<path d="M66 98 L91 103 M109 103 L134 98" stroke="${brow}" stroke-width="6" fill="none" stroke-linecap="round"/>`;
   }
+  const capTilt = hit ? 'translate(-4 -14) rotate(-12 100 64)' : hurt ? 'translate(0 -8) rotate(6 100 64)' : 'translate(0 -8)';
   return svg(`
-    <path d="M10 242 C12 205 36 186 70 180 L130 180 C164 186 188 205 190 242 Z" fill="#efe5d0" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
-    ${neck(shade)}
-    <path d="M30 242 C33 208 50 191 76 184 L124 184 C150 191 167 208 170 242 Z" fill="#e47a2a" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M100 194 L100 242" stroke="#b85e1b" stroke-width="2.5"/>
-    <circle cx="100" cy="208" r="3" fill="#f4d27a" stroke="${OL}" stroke-width="1.5"/>
-    <circle cx="100" cy="226" r="3" fill="#f4d27a" stroke="${OL}" stroke-width="1.5"/>
-    <path d="M60 214 L78 212" stroke="#b85e1b" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M77 176 L123 176 L125 192 Q100 199 75 192 Z" fill="#e47a2a" stroke="${OL}" stroke-width="2.8" stroke-linejoin="round"/>
-    ${ears(skin, shade, 44, 156, 106, 10, 16)}
-    <ellipse cx="100" cy="102" rx="57" ry="63" fill="${skin}" stroke="${OL}" stroke-width="${SW}"/>
-    <path d="M50 92 C46 60 66 36 100 35 C134 36 154 60 150 92 C146 77 140 66 130 59 C120 53 110 51 100 51 C90 51 80 53 70 59 C60 66 54 77 50 92 Z"
-      fill="${white}" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M78 44 Q90 40 100 41 M102 41 Q114 41 124 46 M66 56 Q74 49 84 46" fill="none" stroke="${grey}" stroke-width="2.4" stroke-linecap="round"/>
-    <path d="M45 108 C45 150 68 180 100 182 C132 180 155 150 155 108 C151 126 143 137 132 141 C124 133 112 129 100 131 C88 129 76 133 68 141 C57 137 49 126 45 108 Z"
-      fill="${white}" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M60 140 Q64 152 72 160 M140 140 Q136 152 128 160 M88 168 Q100 172 112 168" fill="none" stroke="${grey}" stroke-width="2.2" stroke-linecap="round"/>
-    ${mouth}
-    <path d="M79 138 C87 131 95 132 100 135 C105 132 113 131 121 138 C113 143 105 141 100 139 C95 141 87 143 79 138 Z" fill="#fff" stroke="${grey}" stroke-width="1.8"/>
+    <path d="M8 242 C10 204 34 186 68 178 L132 178 C166 186 190 204 192 242 Z" fill="${cloth}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M60 196 C72 206 128 206 140 196" fill="none" stroke="#33333b" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M100 18 C56 18 33 56 33 102 C33 142 47 170 66 188 L134 188 C153 170 167 142 167 102 C167 56 144 18 100 18 Z" fill="${cloth}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M90 186 L87 222 M110 186 L113 222" stroke="#d9d9de" stroke-width="3" stroke-linecap="round"/>
+    <rect x="84.5" y="220" width="5" height="8" rx="1.5" fill="#9a9aa3"/><rect x="110.5" y="220" width="5" height="8" rx="1.5" fill="#9a9aa3"/>
+    <ellipse cx="100" cy="114" rx="50" ry="60" fill="#0d0d10"/>
+    <ellipse cx="100" cy="114" rx="44" ry="55" fill="${skin}"/>
+    <path d="M57 90 C70 86 130 86 143 90 L144 98 C130 94 70 94 56 98 Z" fill="#000" opacity="0.22"/>
     ${brows}
     ${eyes}
-    ${glasses}
-    <path d="M100 106 Q92 122 95 127 Q101 131 108 127" fill="none" stroke="${OL}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    ${hurt ? bandAid : ''}
+    <path d="M55 120 C72 128 128 128 145 120 C149 154 132 170 100 172 C68 170 51 154 55 120 Z" fill="${mask}" stroke="${OL}" stroke-width="2.6" stroke-linejoin="round"/>
+    <path d="M92 127 C95 136 105 136 108 127" fill="none" stroke="${fold}" stroke-width="3" stroke-linecap="round"/>
+    <path d="M64 142 C80 150 120 150 136 142 M72 157 C86 163 114 163 128 157" fill="none" stroke="${fold}" stroke-width="2.2" stroke-linecap="round"/>
+    ${hit ? `<ellipse cx="100" cy="150" rx="10" ry="11" fill="#121216" stroke="${fold}" stroke-width="2.5"/>` : ''}
+    <g transform="${capTilt}">
+      <path d="M54 88 C52 51 74 28 100 28 C126 28 148 51 146 88 Z" fill="${cap}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
+      <path d="M100 30 L100 84 M77 37 C70 52 68 70 70 86 M123 37 C130 52 132 70 130 86" fill="none" stroke="#2d2d35" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="100" cy="29" r="4" fill="${cap}" stroke="${OL}" stroke-width="2"/>
+      <g transform="translate(100 60)">
+        <circle r="11" fill="none" stroke="#f1f1f1" stroke-width="2.6"/>
+        <path d="M-8.5 10 L0 -13 L8.5 10 M-11.5 3 L11.5 3" fill="none" stroke="#e53935" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <path d="M43 88 C66 76 134 76 157 88 C151 98 130 101 100 101 C70 101 49 98 43 88 Z" fill="#0b0b0d" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
+      <path d="M56 90 C76 84 124 84 144 90" fill="none" stroke="#26262c" stroke-width="2" stroke-linecap="round"/>
+      ${hurt ? bandAid : ''}
+    </g>
+    ${stone}
   `);
 }
 
@@ -249,13 +196,14 @@ export const hammerSVG = svg(`
   <rect x="12" y="78" width="56" height="18" rx="8" fill="#f4c84b" stroke="${OL}" stroke-width="3"/>
 `, 152, 100);
 
-const BUILDERS = { obama, modi, tamim, taxpayer };
+const BUILDERS = { casseur, tamim, taxpayer };
 
-// Characters drawn from a picture instead of SVG (400 x 480 WebP, same frame).
-// Macron: caricature by DonkeyHotey (2018), Creative Commons, cut out and
-// given "knocked out" eyes for the hit version (see tools/macron/).
+// Characters drawn from a picture instead of SVG (400 x 480 WebP, same frame),
+// built from painted caricatures by tools/portraits/build.py.
+// Macron: caricature by DonkeyHotey (2018), Creative Commons.
 export const IMAGE_CHARACTERS = {
   macron: { idle: 'img/macron.webp', hit: 'img/macron-hit.webp' },
+  obama: { idle: 'img/obama.webp', hit: 'img/obama-hit.webp' },
 };
 
 export function characterSVG(id, expr = 'idle') {

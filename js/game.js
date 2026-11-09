@@ -1,6 +1,6 @@
 // Smash Them Down: the playfield (canvas) and game rules.
 
-import { CHARACTERS, ALL_TYPES, pick } from './characters.js';
+import { CHARACTERS, ALL_TYPES, LEADERS, pick } from './characters.js';
 import { characterSrc, IMAGE_CHARACTERS, pawSVG, hammerSVG, HAMMER, svgToDataURL, loadImage } from './art.js';
 import { sfx, vibrate } from './audio.js';
 
@@ -36,7 +36,7 @@ export function loadArt() {
     const jobs = [];
     for (const id of ALL_TYPES) {
       imgs[id] = {};
-      const exprs = IMAGE_CHARACTERS[id] ? Object.keys(IMAGE_CHARACTERS[id]) : ['idle', 'hit', ...(id === 'modi' ? ['hurt'] : [])];
+      const exprs = IMAGE_CHARACTERS[id] ? Object.keys(IMAGE_CHARACTERS[id]) : ['idle', 'hit', ...(CHARACTERS[id].hp > 1 ? ['hurt'] : [])];
       for (const e of exprs) {
         jobs.push(loadImage(characterSrc(id, e)).then((img) => { imgs[id][e] = img; }));
       }
@@ -129,7 +129,7 @@ export class Game {
     this._mid = 0;
     this._twinId = 0;
     this.stats = {
-      hits: { macron: 0, obama: 0, modi: 0, tamim: 0 },
+      hits: Object.fromEntries(LEADERS.map((id) => [id, 0])),
       taxpayer: 0,
       whiffs: 0,
       escaped: 0,
@@ -527,7 +527,7 @@ export class Game {
     const w = {
       macron: CHARACTERS.macron.weight,
       obama: CHARACTERS.obama.weight,
-      modi: CHARACTERS.modi.weight,
+      casseur: CHARACTERS.casseur.weight,
       tamim: CHARACTERS.tamim.weight + 5 * d,
       taxpayer: this.elapsed < 4 ? 0 : CHARACTERS.taxpayer.weight + 10 * d,
     };
@@ -689,7 +689,7 @@ export class Game {
     this.stats.goodTaps++;
 
     if (m.hp > 1) {
-      // Modi: the first hit only annoys him
+      // two-hit characters: the first hit only annoys them
       m.hp--;
       m.expr = 'hurt';
       m.flinch = 0.14;

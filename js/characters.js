@@ -29,17 +29,24 @@ export const CHARACTERS = {
     ouch: ["No we can't!", 'Not cool!', 'Ouch, folks.'],
     escape: ['Obama out. 🎤', 'Yes I can… escape!'],
   },
-  modi: {
-    name: 'Modi',
-    nickname: '"56-inch chest"',
+  casseur: {
+    name: 'Black Bloc',
+    nickname: '"The Casseur"',
     points: 20,
     speed: 1.15,
     weight: 18,
     hp: 2,
-    help: '56-inch chest: takes TWO hits to go down.',
-    lines: ['Mitron!', 'Make in India!', 'Selfie time!', 'Achhe din aayenge!', 'Mann Ki Baat time!'],
-    tough: ['56-inch chest!', 'Is that all?', 'Not even a scratch!'],
-    ouch: ['Arre yaar!', 'Ouch, Mitron!', 'Demonetised!'],
+    help: 'Hood, cap and mask: takes TWO hits to go down.',
+    lines: [
+      'Smash the system!',
+      'Nice shop window…',
+      'Just here for the sneakers.',
+      'Is this the pension protest?',
+      'Down with… everything!',
+      'Free paving stones!',
+    ],
+    tough: ['Is that all?', 'Not even a scratch!', 'My hood absorbed it!'],
+    ouch: ['Not the sneakers!', 'I want my mom!', "I'm calling my lawyer!", 'Ouch, the system!'],
   },
   tamim: {
     name: 'Tamim',
@@ -71,7 +78,7 @@ export const CHARACTERS = {
   },
 };
 
-export const LEADERS = ['macron', 'obama', 'modi', 'tamim'];
+export const LEADERS = ['macron', 'obama', 'casseur', 'tamim'];
 export const ALL_TYPES = [...LEADERS, 'taxpayer'];
 
 export const pick = (arr) => arr[(Math.random() * arr.length) | 0];
