@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Smash Them Down</title>
+  <meta name="description" content="A satirical whack-a-mole: smash world leaders, spare the taxpayer, and beat your friends on the shared Top 10.">
+  <meta name="theme-color" content="#173d22">
+  <meta name="color-scheme" content="only light">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Smash!">
+  <meta name="format-detection" content="telephone=no">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Smash Them Down">
+  <meta property="og:description" content="Satirical whack-a-mole. Smash the leaders, spare the taxpayer, beat your friends!">
+  <meta property="og:image" content="icons/icon-512.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preload" href="fonts/LilitaOne-Regular-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app">
+
+    <!-- ============ MENU ============ -->
+    <section class="screen active" id="menu">
+      <div class="menu-top">
+        <h1 class="logo" aria-label="Smash Them Down">
+          <span class="l1">SMASH</span>
+          <span class="l2">THEM DOWN</span>
+        </h1>
+        <p class="tagline">The world leaders' summit went underground.</p>
+      </div>
+
+      <div class="lineup" id="lineup" aria-hidden="true"></div>
+
+      <div class="menu-buttons">
+        <button class="btn btn-play" id="btn-play" type="button">PLAY</button>
+        <button class="btn" id="btn-board" type="button">TOP 10</button>
+        <button class="btn" id="btn-howto" type="button">HOW TO PLAY</button>
+      </div>
+      <p class="best" id="best"></p>
+
+      <div class="install" id="install" hidden>
+        <p id="install-text"></p>
+        <button class="btn btn-small" id="btn-install" type="button" hidden>INSTALL</button>
+        <button class="close" id="btn-install-close" type="button" aria-label="Dismiss">×</button>
+      </div>
+
+      <footer class="menu-foot">
+        <button class="icon-btn sound-btn" type="button" aria-label="Toggle sound"></button>
+        <p class="disclaimer">A work of satire. Cartoon caricatures only.<br>No politicians were harmed in the making of this game.</p>
+      </footer>
+    </section>
+
+    <!-- ============ HOW TO PLAY ============ -->
+    <section class="screen" id="howto">
+      <div class="panel flex">
+        <h2>HOW TO PLAY</h2>
+        <div class="scroll">
+          <p class="lead">Tap the leaders popping out of their holes. You have <b>60&nbsp;seconds</b>.</p>
+          <ul class="cast" id="cast"></ul>
+          <p class="tip"><b>Combo:</b> every 5 hits in a row raises your multiplier, up to <b>x5</b>. A miss, or a leader who gets away, resets it.</p>
+        </div>
+        <button class="btn btn-play" type="button" data-go="menu">GOT IT!</button>
+      </div>
+    </section>
+
+    <!-- ============ GAME ============ -->
+    <section class="screen" id="game">
+      <header class="hud">
+        <div class="hud-score">
+          <span class="lbl">SCORE</span>
+          <span class="val" id="hud-score">0</span>
+        </div>
+        <div class="hud-time" id="hud-time-wrap">
+          <div class="bar"><div class="fill" id="hud-bar"></div></div>
+          <span class="secs" id="hud-time">60</span>
+        </div>
+        <button class="icon-btn" id="btn-pause" type="button" aria-label="Pause">
+          <svg viewBox="0 0 24 24" width="22" height="22"><rect x="5" y="4" width="5" height="16" rx="1.5"/><rect x="14" y="4" width="5" height="16" rx="1.5"/></svg>
+        </button>
+      </header>
+      <div class="combo" id="hud-combo">COMBO x2</div>
+      <div class="field"><canvas id="field"></canvas></div>
+
+      <div class="overlay" id="countdown" hidden><span id="count-text">3</span></div>
+
+      <div class="overlay dim" id="paused" hidden>
+        <div class="panel small">
+          <h2>PAUSED</h2>
+          <button class="btn btn-play" id="btn-resume" type="button">RESUME</button>
+          <button class="btn" id="btn-restart" type="button">RESTART</button>
+          <button class="btn" id="btn-quit" type="button">QUIT</button>
+          <button class="icon-btn sound-btn" type="button" aria-label="Toggle sound"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GAME OVER ============ -->
+    <section class="screen" id="over">
+      <div class="panel flex">
+        <div class="scroll">
+        <h2>TIME'S UP!</h2>
+        <div class="final-score" id="final-score">0</div>
+        <div class="rank" id="final-rank"></div>
+        <div class="stats" id="final-stats"></div>
+
+        <form class="name-form" id="name-form" hidden autocomplete="off">
+          <label for="name-input">🎉 NEW TOP 10 SCORE! Your name:</label>
+          <div class="row">
+            <input id="name-input" name="nickname" maxlength="12" autocomplete="nickname" autocapitalize="words" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="Your name">
+            <button class="btn btn-small btn-play" type="submit" id="btn-save">SAVE</button>
+          </div>
+        </form>
+
+        <p class="status" id="over-status"></p>
+        <ol class="board" id="over-board"></ol>
+        </div>
+
+        <div class="row-btns">
+          <button class="btn btn-play" id="btn-again" type="button">PLAY AGAIN</button>
+          <div class="row">
+            <button class="btn" id="btn-share" type="button">CHALLENGE</button>
+            <button class="btn" type="button" data-go="menu">MENU</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LEADERBOARD ============ -->
+    <section class="screen" id="board">
+      <div class="panel flex">
+        <h2>TOP 10 SMASHERS</h2>
+        <p class="status" id="board-status"></p>
+        <div class="scroll">
+          <ol class="board" id="board-list"></ol>
+        </div>
+        <div class="row-btns">
+          <div class="row">
+            <button class="btn" id="btn-refresh" type="button">REFRESH</button>
+            <button class="btn btn-play" type="button" data-go="menu">BACK</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast" id="toast" hidden></div>
+  </main>
+
+  <div class="rotate" id="rotate">
+    <div>
+      <svg viewBox="0 0 64 64" width="72" height="72" aria-hidden="true"><rect x="20" y="6" width="24" height="44" rx="5" fill="none" stroke="#fff" stroke-width="4"/><circle cx="32" cy="43" r="2.5" fill="#fff"/><path d="M50 30 a18 18 0 0 1 -6 22" fill="none" stroke="#ffcc33" stroke-width="4" stroke-linecap="round"/><path d="M40 50 l4 3 l3 -5" fill="none" stroke="#ffcc33" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <p>Turn your phone upright to play</p>
+    </div>
+  </div>
+
+  <noscript><p class="noscript">This game needs JavaScript.</p></noscript>
+  <script src="js/config.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
