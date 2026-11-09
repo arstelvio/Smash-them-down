@@ -1,5 +1,7 @@
-// Cartoon caricatures drawn as inline SVG strings.
-// Every character uses the same 200 x 240 canvas: the head sits in the upper
+// Character artwork.
+// Most characters are cartoon caricatures drawn as inline SVG strings; Macron
+// uses a painted caricature (img/, see IMAGE_CHARACTERS).
+// Every character uses the same 200 x 240 frame: the head sits in the upper
 // part and the shoulders at the bottom are what disappears into the hole.
 // Expressions: 'idle', 'hit' and (Modi only) 'hurt'.
 
@@ -65,73 +67,12 @@ function suit(suitCol, lapel, tie, pin = '') {
   ${pin}`;
 }
 
-const flagFR = (x, y) => `<g transform="translate(${x} ${y})">
-  <rect width="5" height="9" fill="#1f4fbf"/><rect x="5" width="5" height="9" fill="#fff"/><rect x="10" width="5" height="9" fill="#e8343d"/>
-  <rect width="15" height="9" fill="none" stroke="${OL}" stroke-width="1.2"/></g>`;
-
 const flagUS = (x, y) => `<g transform="translate(${x} ${y})">
   <rect width="16" height="10" fill="#fff"/>
   <rect y="0" width="16" height="1.6" fill="#d22f3c"/><rect y="3.2" width="16" height="1.6" fill="#d22f3c"/>
   <rect y="6.4" width="16" height="1.6" fill="#d22f3c"/><rect y="8.6" width="16" height="1.4" fill="#d22f3c"/>
   <rect width="7" height="5.4" fill="#27407f"/>
   <rect width="16" height="10" fill="none" stroke="${OL}" stroke-width="1.2"/></g>`;
-
-/* ---------- Macron ---------- */
-
-function macron(expr) {
-  const skin = '#f4caa6', shade = '#d69f7a', hair = '#4a3122', hairHi = '#82604a', brow = '#3a2619';
-  const hit = expr === 'hit';
-  // Long face with a narrow, V-shaped jaw.
-  const face = 'M100 31 C134 31 155 54 155 90 C155 116 149 134 137 149 C127 161 114 169 100 170 C86 169 73 161 63 149 C51 134 45 116 45 90 C45 54 66 31 100 31 Z';
-  // Big, protruding ears.
-  const earL = 'M50 84 C43 69 29 64 26 76 C23 91 27 108 34 118 C39 124 45 126 51 124 Z';
-  const earR = 'M150 84 C157 69 171 64 174 76 C177 91 173 108 166 118 C161 124 155 126 149 124 Z';
-  // Thick, straight eyebrows that drop at the outer end.
-  const browL = 'M58 87 C66 78 80 75 94 78 C95 81 95 84 94 86 C82 84 71 86 61 92 C58 91 57 89 58 87 Z';
-  const browR = 'M142 87 C134 78 120 75 106 78 C105 81 105 84 106 86 C118 84 129 86 139 92 C142 91 143 89 142 87 Z';
-  // Voluminous hair swept back, parted on the side, grey at the temples.
-  const hairPath = 'M48 90 C38 60 48 28 78 15 C101 6 132 9 150 26 C162 39 162 64 152 90 C150 74 146 62 139 55 C128 51 114 56 102 54 C90 52 76 47 63 53 C55 61 50 75 48 90 Z';
-  const eye = (cx, dir) => `
-    <ellipse cx="${cx}" cy="101" rx="12" ry="8.6" fill="#fff" stroke="${OL}" stroke-width="2.2"/>
-    <circle cx="${cx + dir}" cy="101.8" r="6.6" fill="#2b8af0" stroke="#164a95" stroke-width="1.4"/>
-    <circle cx="${cx + dir}" cy="101.8" r="2.9" fill="#0d0d0d"/>
-    <circle cx="${cx + dir + 2.4}" cy="99.2" r="2" fill="#fff"/>
-    <path d="M${cx - 13} 99.5 C${cx - 8} 91 ${cx + 8} 91 ${cx + 13} 98.5" fill="none" stroke="${OL}" stroke-width="3.8" stroke-linecap="round"/>
-    <path d="M${cx - 7} 111.5 Q${cx} 113.5 ${cx + 7} 111.5" fill="none" stroke="${shade}" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>`;
-  return svg(`
-    <defs>
-      <clipPath id="mhc"><path d="${hairPath}"/></clipPath>
-      <radialGradient id="mgrey">
-        <stop offset="0" stop-color="#b9b3ac"/><stop offset="0.55" stop-color="#a39b93"/><stop offset="1" stop-color="#a39b93" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
-    <path d="M86 146 L86 188 L114 188 L114 146 Z" fill="${shade}" stroke="${OL}" stroke-width="${SW}"/>
-    ${suit('#1c2850', '#141d3c', '#1f2f63', flagFR(126, 200))}
-    <path d="${earL}" fill="${skin}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="${earR}" fill="${skin}" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M45 88 C36 80 32 96 37 108 C39 113 43 116 46 116 M155 88 C164 80 168 96 163 108 C161 113 157 116 154 116" fill="none" stroke="${shade}" stroke-width="3" stroke-linecap="round"/>
-    <path d="${face}" fill="${skin}" stroke="${OL}" stroke-width="${SW}"/>
-    <g clip-path="url(#mhc)">
-      <rect x="30" y="0" width="140" height="100" fill="${hair}"/>
-      <ellipse cx="47" cy="80" rx="20" ry="34" fill="url(#mgrey)"/>
-      <ellipse cx="153" cy="80" rx="20" ry="34" fill="url(#mgrey)"/>
-    </g>
-    <path d="${hairPath}" fill="none" stroke="${OL}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M137 22 C142 32 143 43 140 54" fill="none" stroke="#2c1b10" stroke-width="2.6" stroke-linecap="round"/>
-    <path d="M134 50 C130 34 118 24 98 22 M118 53 C112 39 98 31 77 30 M100 53 C92 43 78 39 61 44" fill="none" stroke="${hairHi}" stroke-width="3.2" stroke-linecap="round"/>
-    <path d="M55 72 C55 62 59 55 66 50 M145 72 C145 62 141 55 134 50" fill="none" stroke="#d4cfc9" stroke-width="2.2" stroke-linecap="round"/>
-    ${hit ? browsWorried(brow, 84, 6.5) : `<path d="${browL}" fill="${brow}"/><path d="${browR}" fill="${brow}"/>`}
-    ${hit ? eyesHit(101) : eye(78, 1) + eye(122, -1)}
-    <path d="M102 93 C103 104 105 115 107 122 C107 128 101 130 96 127 C93 126 92 123 94 121" fill="none" stroke="${OL}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M79 126 C75 133 76 140 79 145 M121 124 C126 131 126 138 122 143" fill="none" stroke="${shade}" stroke-width="2" stroke-linecap="round" opacity="0.85"/>
-    ${hit ? mouthHit(148) : `
-      <path d="M80 142 C89 148 111 148 121 139" fill="none" stroke="${OL}" stroke-width="3.4" stroke-linecap="round"/>
-      <path d="M80 142 L76.5 140 M121 139 L124 135" stroke="${OL}" stroke-width="2.8" stroke-linecap="round"/>
-      <path d="M92 152 Q101 155 110 151" fill="none" stroke="${shade}" stroke-width="2.2" stroke-linecap="round"/>`}
-    <path d="M100 159 L100 165" stroke="${shade}" stroke-width="2.5" stroke-linecap="round"/>
-    ${cheeks(0.2)}
-  `);
-}
 
 /* ---------- Obama ---------- */
 
@@ -308,10 +249,24 @@ export const hammerSVG = svg(`
   <rect x="12" y="78" width="56" height="18" rx="8" fill="#f4c84b" stroke="${OL}" stroke-width="3"/>
 `, 152, 100);
 
-const BUILDERS = { macron, obama, modi, tamim, taxpayer };
+const BUILDERS = { obama, modi, tamim, taxpayer };
+
+// Characters drawn from a picture instead of SVG (400 x 480 WebP, same frame).
+// Macron: caricature by DonkeyHotey (2018), Creative Commons, cut out and
+// given "knocked out" eyes for the hit version (see tools/macron/).
+export const IMAGE_CHARACTERS = {
+  macron: { idle: 'img/macron.webp', hit: 'img/macron-hit.webp' },
+};
 
 export function characterSVG(id, expr = 'idle') {
   return BUILDERS[id](expr);
+}
+
+/** URL of a character's picture: an image file or an SVG data URL. */
+export function characterSrc(id, expr = 'idle') {
+  const img = IMAGE_CHARACTERS[id];
+  if (img) return img[expr] || img.idle;
+  return svgToDataURL(characterSVG(id, expr));
 }
 
 export const svgToDataURL = (s) =>

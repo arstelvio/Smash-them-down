@@ -1,7 +1,7 @@
 // Smash Them Down: the playfield (canvas) and game rules.
 
 import { CHARACTERS, ALL_TYPES, pick } from './characters.js';
-import { characterSVG, pawSVG, hammerSVG, HAMMER, svgToDataURL, loadImage } from './art.js';
+import { characterSrc, IMAGE_CHARACTERS, pawSVG, hammerSVG, HAMMER, svgToDataURL, loadImage } from './art.js';
 import { sfx, vibrate } from './audio.js';
 
 export const GAME_DURATION = 60; // seconds
@@ -36,8 +36,9 @@ export function loadArt() {
     const jobs = [];
     for (const id of ALL_TYPES) {
       imgs[id] = {};
-      for (const e of ['idle', 'hit', ...(id === 'modi' ? ['hurt'] : [])]) {
-        jobs.push(loadImage(svgToDataURL(characterSVG(id, e))).then((img) => { imgs[id][e] = img; }));
+      const exprs = IMAGE_CHARACTERS[id] ? Object.keys(IMAGE_CHARACTERS[id]) : ['idle', 'hit', ...(id === 'modi' ? ['hurt'] : [])];
+      for (const e of exprs) {
+        jobs.push(loadImage(characterSrc(id, e)).then((img) => { imgs[id][e] = img; }));
       }
     }
     jobs.push(loadImage(svgToDataURL(pawSVG)).then((i) => { imgs.paw = i; }));

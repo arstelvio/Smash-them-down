@@ -15,6 +15,10 @@ const art = await import('data:text/javascript,' + encodeURIComponent(artSrc));
 
 const OL = '#2e1c10';
 
+// The icon shows Macron (picture-based character), knocked out.
+const macronHit = 'data:image/webp;base64,' + fs.readFileSync(path.join(root, art.IMAGE_CHARACTERS.macron.hit)).toString('base64');
+const placeImage = (href, x, y, w) => `<image href="${href}" x="${x}" y="${y}" width="${w}" height="${w * 1.2}"/>`;
+
 // Places a 200x240 character SVG inside the icon.
 const place = (svgStr, x, y, w) =>
   svgStr.replace(/<svg [^>]*>/, `<svg x="${x}" y="${y}" width="${w}" height="${w * 1.2}" viewBox="0 0 200 240">`);
@@ -61,7 +65,7 @@ function scene() {
     <ellipse cx="${hole.cx}" cy="${hole.cy + 10}" rx="${hole.rx * 1.24}" ry="${hole.ry * 1.62}" fill="url(#mound)" stroke="${OL}" stroke-width="8"/>
     <ellipse cx="${hole.cx}" cy="${hole.cy}" rx="${hole.rx}" ry="${hole.ry}" fill="#140a04" stroke="${OL}" stroke-width="6"/>
     <g clip-path="url(#above)">
-      ${place(art.characterSVG('macron', 'hit'), 96, 146, 320)}
+      ${placeImage(macronHit, 96, 146, 320)}
     </g>
     <path d="M${hole.cx - hole.rx * 1.24} ${hole.cy + 10}
              A ${hole.rx * 1.24} ${hole.ry * 1.62} 0 0 0 ${hole.cx + hole.rx * 1.24} ${hole.cy + 10}

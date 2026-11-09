@@ -2,7 +2,7 @@
 
 import { Game, GAME_DURATION } from './game.js';
 import { CHARACTERS, LEADERS, ALL_TYPES } from './characters.js';
-import { characterSVG, svgToDataURL } from './art.js';
+import { characterSrc } from './art.js';
 import { unlockAudio, sfx, isMuted, setMuted } from './audio.js';
 import * as LB from './leaderboard.js';
 
@@ -45,13 +45,13 @@ $$('[data-go]').forEach((b) => b.addEventListener('click', () => {
 /* ---------- artwork in the DOM ---------- */
 
 const faceURL = {};
-for (const id of ALL_TYPES) faceURL[id] = svgToDataURL(characterSVG(id, 'idle'));
+for (const id of ALL_TYPES) faceURL[id] = characterSrc(id, 'idle');
 
 $('#lineup').innerHTML = LEADERS.map((id, i) =>
-  `<div class="peek" style="--i:${i}"><div class="clip"><img src="${faceURL[id]}" alt="" draggable="false"></div></div>`).join('');
+  `<div class="peek peek-${id}" style="--i:${i}"><div class="clip"><img src="${faceURL[id]}" alt="" draggable="false"></div></div>`).join('');
 
 const avatar = (id, alt = '') =>
-  `<span class="avatar"><img src="${faceURL[id]}" alt="${alt}" draggable="false"></span>`;
+  `<span class="avatar avatar-${id}"><img src="${faceURL[id]}" alt="${alt}" draggable="false"></span>`;
 
 $('#cast').innerHTML = ALL_TYPES.map((id) => {
   const c = CHARACTERS[id];

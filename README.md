@@ -8,7 +8,7 @@ Jeu satirique de « tape-taupe » pour mobile : **Macron, Obama, Modi et Cheikh 
 - ✈️ Fonctionne hors connexion une fois ouvert (les scores sont envoyés au retour du réseau).
 - 🇬🇧 Le jeu est entièrement en anglais.
 
-> Œuvre satirique : caricatures dessinées en SVG, aucune vraie photo.
+> Œuvre satirique : uniquement des caricatures. Obama, Modi, Tamim et la taupe sont dessinés en SVG ; Macron utilise une caricature peinte de DonkeyHotey (voir *Crédits*).
 
 ## Règles
 
@@ -78,7 +78,8 @@ style.css             styles
 js/config.js          ← URL Firebase à renseigner
 js/main.js            écrans, classement, installation
 js/game.js            moteur du jeu (canvas)
-js/art.js             caricatures en SVG
+js/art.js             caricatures en SVG (+ images de img/)
+img/                  Macron (normal et « assommé »), au format WebP
 js/characters.js      personnages, points, répliques
 js/audio.js           sons synthétisés (Web Audio, aucun fichier)
 js/leaderboard.js     Top 10 partagé (Firebase REST) + secours local/hors ligne
@@ -86,7 +87,13 @@ sw.js                 service worker (hors ligne, chargement rapide)
 manifest.webmanifest  manifeste PWA (icône, plein écran, portrait)
 firebase-rules.json   règles de sécurité de la base
 icons/                icônes (générées par tools/make-icons.mjs)
+tools/macron/         portrait d'origine + scripts de détourage (cutout.py, sprite.mjs)
 fonts/                polices Lilita One et Nunito (licence SIL OFL)
 ```
 
 Pour tester en local : `python3 -m http.server 8000` puis ouvrir <http://localhost:8000>.
+
+## Crédits
+
+- **Caricature d'Emmanuel Macron** : [DonkeyHotey](https://www.flickr.com/photos/donkeyhotey/) (2018), publiée sous licence Creative Commons sur Flickr. Elle est utilisée détourée, et la version « assommée » ajoute des yeux en croix et une bosse. La signature de l'artiste a été retirée de l'image du jeu, d'où la mention dans le jeu (écran *How to play*) et ici. Pense à vérifier sur la page Flickr d'origine la licence exacte (CC BY ou CC BY-SA) et à compléter la mention si besoin.
+- **Polices** : Lilita One et Nunito, licence SIL Open Font License (voir `fonts/OFL.txt`).
